@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}Agendar Consulta{% endblock %}
+
+{% block content %}
+
+<h3 class="mb-4">Agendamento de Consulta</h3>
+
+<form method="post">
+    {% csrf_token %}
+    {% if form.non_field_errors %}
+    <div class="alert alert-danger">
+        {{ form.non_field_errors }}
+    </div>
+    {% endif %}
+
+
+    <div class="mb-3">
+        <label class="form-label">Paciente</label>
+        {{ form.paciente }}
+        {{ form.paciente.errors }}
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Médico</label>
+        {{ form.medico }}
+        {{ form.medico.errors }}
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Data</label>
+        {{ form.data }}
+        {{ form.data.errors }}
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Horário</label>
+        {{ form.hora }}
+        {{ form.hora.errors }}
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Observações</label>
+        {{ form.observacoes }}
+        {{ form.observacoes.errors }}
+    </div>
+
+    <button class="btn btn-success">Salvar</button>
+    <a href="{% url 'consultas-lista' %}" class="btn btn-secondary">Cancelar</a>
+
+</form>
+
+
+{% endblock %}

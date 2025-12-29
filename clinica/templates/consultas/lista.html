@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}Consultas{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h3>Consultas Agendadas</h3>
+{% if request.user.profissional.tipo == 'recepcionista' %}
+    <a href="{% url 'consultas-criar' %}" class="btn btn-success">
+        Nova Consulta
+    </a>
+{% endif %}
+</div>
+
+<table class="table table-striped ">
+    <thead class="table-secondary">
+        <tr>
+            <th>Paciente</th>
+            <th>Médico</th>
+            <th>Data</th>
+            <th>Horário</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for consulta in consultas %}
+            <tr>
+                <td>{{ consulta.paciente.nome }}</td>
+                <td>{{ consulta.medico }}</td>
+                <td>{{ consulta.data|date:"d/m/Y" }}</td>
+                <td>{{ consulta.hora|time:"H:i" }}</td>
+                <td>{{ consulta.get_status_display }}</td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="5" class="text-center">
+                    Nenhuma consulta encontrada.
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}
