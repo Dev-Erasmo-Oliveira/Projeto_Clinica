@@ -3,53 +3,58 @@
 {% block title %}Pacientes{% endblock %}
 
 {% block content %}
+<div class="page-card">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+        <div>
+            <h1 class="page-title">Pacientes</h1>
+            <p class="page-subtitle">Gerencie os pacientes cadastrados na clínica.</p>
+        </div>
 
-<h3 class="mb-3">Pacientes</h3>
+        {% if request.user.profissional.tipo == 'recepcionista' %}
+            <a href="{% url 'pacientes-criar' %}" class="btn btn-primary px-4">
+                Novo Paciente
+            </a>
+        {% endif %}
+    </div>
 
-{% if request.user.profissional.tipo == 'recepcionista' %}
-    <a href="{% url 'pacientes-criar' %}" class="btn btn-success mb-3">
-        Novo Paciente
-    </a>
-{% endif %}
-
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Nome</th>
-            <th>CPF</th>
-            <th class="text-center">Ações</th>
-        </tr>
-    </thead>
-
-    <tbody>
-        {% for paciente in pacientes %}
-            <tr>
-                <td>{{ paciente.nome }}</td>
-                <td>{{ paciente.cpf }}</td>
-                <td class="text-center">
-                    {% if request.user.profissional.tipo == 'recepcionista' %}
-                        <a href="{% url 'paciente-editar' paciente.id %}"
-                           class="btn btn-warning btn-sm">
-                            Editar
-                        </a>
-
-                        <a href="{% url 'paciente-excluir' paciente.id %}"
-                           class="btn btn-danger btn-sm">
-                            Excluir
-                        </a>
-                    {% else %}
-                        <span class="text-muted">—</span>
-                    {% endif %}
-                </td>
-            </tr>
-        {% empty %}
-            <tr>
-                <td colspan="3" class="text-center text-muted">
-                    Nenhum paciente cadastrado.
-                </td>
-            </tr>
-        {% endfor %}
-    </tbody>
-</table>
-
+    <div class="table-responsive">
+        <table class="table table-modern align-middle">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>CPF</th>
+                    <th class="text-center">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for paciente in pacientes %}
+                    <tr>
+                        <td class="fw-semibold">{{ paciente.nome }}</td>
+                        <td>{{ paciente.cpf }}</td>
+                        <td class="text-center">
+                            {% if request.user.profissional.tipo == 'recepcionista' %}
+                                <a href="{% url 'paciente-editar' paciente.id %}" class="btn btn-outline-warning btn-sm me-1">
+                                    Editar
+                                </a>
+                                <a href="{% url 'paciente-excluir' paciente.id %}" class="btn btn-outline-danger btn-sm">
+                                    Excluir
+                                </a>
+                            {% else %}
+                                <span class="text-muted">—</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="3">
+                            <div class="empty-state">
+                                Nenhum paciente cadastrado.
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 {% endblock %}

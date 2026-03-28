@@ -12,6 +12,7 @@ from .views.pacientes import (
 from .views.consultas import (
     ConsultaListView,
     ConsultaCreateView,
+    ConsultaStatusUpdateView
 )
 
 from .views.medico_consultas_list import MedicoConsultasView
@@ -28,6 +29,12 @@ urlpatterns = [
 
     path('consultas/', ConsultaListView.as_view(), name='consultas-lista'),
     path('consultas/nova/', ConsultaCreateView.as_view(), name='consultas-criar'),
+        path(
+        'consultas/<int:pk>/status/',
+        ConsultaStatusUpdateView.as_view(),
+        name='consultas-status'
+    ),   
+
 
     path('minhas-consultas/', MedicoConsultasView.as_view(), name='medico-consultas'),
 ]

@@ -1,68 +1,67 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}Clínica{% endblock %}</title>
 
-    <!-- Bootsrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
-<body>
+<body class="app-body">
 
-<nav class="navbar navbar-dark bg-dark px-3">
-    <div class="container-fluid">
-
+<nav class="navbar navbar-expand-lg app-navbar shadow-sm">
+    <div class="container">
         {% if request.user.is_authenticated %}
 
-            <div class="d-flex align-items-center gap-2">
-                {% if request.user.profissional.tipo == 'recepcionista' %}
-                    <a class="navbar-brand" href="{% url 'consultas-lista' %}">
-                        Clínica
-                    </a>
+            {% if request.user.profissional.tipo == 'recepcionista' %}
+                <a class="navbar-brand fw-bold" href="{% url 'consultas-lista' %}">
+                    Clínica Life
+                </a>
+            {% elif request.user.profissional.tipo == 'medico' %}
+                <a class="navbar-brand fw-bold" href="{% url 'medico-consultas' %}">
+                    Clínica Life
+                </a>
+            {% endif %}
 
-                    <a href="{% url 'consultas-lista' %}" class="btn btn-outline-light btn-sm">
+            <div class="d-flex flex-wrap align-items-center gap-2 ms-auto">
+                {% if request.user.profissional.tipo == 'recepcionista' %}
+                    <a href="{% url 'consultas-lista' %}" class="btn btn-nav btn-nav-uniform">
                         Consultas
                     </a>
-                    <a href="{% url 'pacientes-lista' %}" class="btn btn-outline-light btn-sm">
+
+                    <a href="{% url 'pacientes-lista' %}" class="btn btn-nav btn-nav-uniform">
                         Pacientes
                     </a>
 
-                    <a href="{% url 'pacientes-criar' %}" class="btn btn-outline-light btn-sm">
+                    <a href="{% url 'pacientes-criar' %}" class="btn btn-primary-action btn-nav-uniform">
                         Novo Paciente
                     </a>
                 {% endif %}
 
                 {% if request.user.profissional.tipo == 'medico' %}
-                    <a class="navbar-brand" href="{% url 'medico-consultas' %}">
-                        Clínica
-                    </a>
-                {% endif %}
-            </div>
-
-            <div class="d-flex align-items-center gap-2 ms-auto">
-                {% if request.user.profissional.tipo == 'medico' %}
-                    <a href="{% url 'medico-consultas' %}" class="btn btn-outline-light btn-sm">
+                    <a href="{% url 'medico-consultas' %}" class="btn btn-nav btn-nav-uniform">
                         Minha Agenda
                     </a>
                 {% endif %}
 
-                <form method="post" action="{% url 'logout' %}">
+                <form method="post" action="{% url 'logout' %}" class="m-0">
                     {% csrf_token %}
-                    <button type="submit" class="btn btn-outline-danger btn-sm">
+                    <button type="submit" class="btn btn-danger-outline btn-nav-uniform">
                         Sair
                     </button>
                 </form>
             </div>
-
         {% endif %}
-
     </div>
 </nav>
 
-
-<div class="container mt-4">
-    {% block content %}{% endblock %}
-</div>
+<main class="py-4">
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+</main>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>

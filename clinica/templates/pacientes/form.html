@@ -3,76 +3,73 @@
 {% block title %}
     {% if object %}
         Editar Paciente
-    {% else %}Cadastrar Paciente
+    {% else %}
+        Cadastrar Paciente
     {% endif %}
 {% endblock %}
 
 {% block content %}
-
-<div class="card shadow-sm">
-    <div class="card-body">
-
-        <h4 class="mb-4">
+<div class="form-card">
+    <div class="mb-4">
+        <h1 class="form-title">
             {% if object %}
                 Editar Paciente
             {% else %}
                 Cadastro de Paciente
             {% endif %}
-        </h4>
+        </h1>
+        <p class="form-subtitle">
+            Preencha os dados do paciente para manter o cadastro atualizado.
+        </p>
+    </div>
 
-        <form method="post">
-            {% csrf_token %}
+    <form method="post">
+        {% csrf_token %}
 
-            <div class="row">
-                <div class="col-md-8 mb-3">
-                    <label class="form-label">Nome</label>
-                    {{ form.nome }}
-                    {{ form.nome.errors }}
-                </div>
-
-                <div class="col-md-4 mb-3">
-                    <label class="form-label">CPF</label>
-                    {{ form.cpf }}
-                    {{ form.cpf.errors }}
-                </div>
+        <div class="row g-3">
+            <div class="col-md-8">
+                <label class="form-label">Nome</label>
+                {{ form.nome }}
+                {{ form.nome.errors }}
             </div>
 
-            <div class="row">
-                <div class="col-md-4 mb-3">
-                    <label class="form-label">Data de nascimento</label>
-                    {{ form.data_nascimento }}
-                    {{ form.data_nascimento.errors }}
-                </div>
-
-                <div class="col-md-4 mb-3">
-                    <label class="form-label">Telefone</label>
-                    {{ form.telefone }}
-                    {{ form.telefone.errors }}
-                </div>
-
-                <div class="col-md-4 mb-3">
-                    <label class="form-label">Email</label>
-                    {{ form.email }}
-                    {{ form.email.errors }}
-                </div>
+            <div class="col-md-4">
+                <label class="form-label">CPF</label>
+                {{ form.cpf }}
+                {{ form.cpf.errors }}
             </div>
 
-            <div class="mb-3">
+            <div class="col-md-4">
+                <label class="form-label">Data de nascimento</label>
+                {{ form.data_nascimento }}
+                {{ form.data_nascimento.errors }}
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label">Telefone</label>
+                {{ form.telefone }}
+                {{ form.telefone.errors }}
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label">Email</label>
+                {{ form.email }}
+                {{ form.email.errors }}
+            </div>
+
+            <div class="col-12">
                 <label class="form-label">Endereço</label>
                 {{ form.endereco }}
                 {{ form.endereco.errors }}
             </div>
+        </div>
 
-            <div class="mt-4">
-                <button class="btn btn-success">Salvar</button>
-                <a href="{% url 'pacientes-lista' %}" class="btn btn-secondary">
-                    Cancelar
-                </a>
-            </div>
-
-        </form>
-
-    </div>
+        <div class="form-actions">
+            <button class="btn btn-success px-4">Salvar</button>
+            <a href="{% url 'pacientes-lista' %}" class="btn btn-soft-secondary px-4">
+                Cancelar
+            </a>
+        </div>
+    </form>
 </div>
-
 {% endblock %}

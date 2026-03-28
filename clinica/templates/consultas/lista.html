@@ -1,45 +1,135 @@
 {% extends 'base.html' %}
 
-{% block title %}Consultas{% endblock %}
+{% block title %}Dashboard{% endblock %}
 
 {% block content %}
+<div class="page-card">
 
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <h3>Consultas Agendadas</h3>
-{% if request.user.profissional.tipo == 'recepcionista' %}
-    <a href="{% url 'consultas-criar' %}" class="btn btn-success">
-        Nova Consulta
-    </a>
-{% endif %}
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+        <div>
+            <h1 class="page-title">Dashboard da Clínica</h1>
+            <p class="page-subtitle">
+                Visão geral dos pacientes e dos agendamentos da clínica.
+            </p>
+        </div>
+
+        {% if request.user.profissional.tipo == 'recepcionista' %}
+            <a href="{% url 'consultas-criar' %}" class="btn btn-primary px-4">
+                Nova Consulta
+            </a>
+        {% endif %}
+    </div>
+
+    <div class="dashboard-cards mb-4">
+        <div class="dashboard-card">
+            <div class="dashboard-card-label">Total de pacientes</div>
+            <div class="dashboard-card-value">{{ total_pacientes }}</div>
+        </div>
+
+        <div class="dashboard-card">
+            <div class="dashboard-card-label">Consultas de hoje</div>
+            <div class="dashboard-card-value">{{ consultas_hoje }}</div>
+        </div>
+
+        <div class="dashboard-card">
+            <div class="dashboard-card-label">Agendadas</div>
+            <div class="dashboard-card-value text-primary">
+                {{ consultas_agendadas }}
+            </div>
+        </div>
+
+        <div class="dashboard-card">
+            <div class="dashboard-card-label">Realizadas</div>
+            <div class="dashboard-card-value text-success">
+                {{ consultas_realizadas }}
+            </div>
+        </div>
+
+        <div class="dashboard-card">
+            <div class="dashboard-card-label">Canceladas</div>
+            <div class="dashboard-card-value text-danger">
+                {{ consultas_canceladas }}
+            </div>
+        </div>
+
+        <div class="dashboard-card">
+            <div class="dashboard-card-label">Faltou</div>
+            <div class="dashboard-card-value text-warning">
+                {{ consultas_faltou }}
+            </div>
+        </div>
+    </div>
+
+    <div class="section-header mb-3">
+        <h2 class="section-title">Visão geral das consultas</h2>
+        <p class="section-subtitle">
+            Acompanhe os agendamentos e o status de cada consulta.
+        </p>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-modern align-middle">
+            <thead>
+                <tr>
+                    <th>Paciente</th>
+                    <th>Médico</th>
+                    <th>Data</th>
+                    <th>Horário</th>
+                    <th>Status</th>
+                    <th class="text-center">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for consulta in consultas %}
+                    <tr>
+                        <td class="fw-semibold">{{ consulta.paciente.nome }}</td>
+                        <td>{{ consulta.medico }}</td>
+                        <td>{{ consulta.data|date:"d/m/Y" }}</td>
+                        <td>{{ consulta.hora|time:"H:i" }}</td>
+                        <td>
+                            {% if consulta.status == 'agendada' %}
+                                <span class="badge-status status-agendada">
+                                    {{ consulta.get_status_display }}
+                                </span>
+                            {% elif consulta.status == 'realizada' %}
+                                <span class="badge-status status-realizada">
+                                    {{ consulta.get_status_display }}
+                                </span>
+                            {% elif consulta.status == 'cancelada' %}
+                                <span class="badge-status status-cancelada">
+                                    {{ consulta.get_status_display }}
+                                </span>
+                            {% elif consulta.status == 'faltou' %}
+                                <span class="badge-status status-faltou">
+                                    {{ consulta.get_status_display }}
+                                </span>
+                            {% else %}
+                                <span class="badge bg-secondary">
+                                    {{ consulta.get_status_display }}
+                                </span>
+                            {% endif %}
+                        </td>
+                        <td class="text-center">
+                            {% if request.user.profissional.tipo == 'recepcionista' %}
+                                <a href="{% url 'consultas-status' consulta.id %}" class="btn btn-outline-primary btn-sm">
+                                    Atualizar status
+                                </a>
+                            {% else %}
+                                <span class="text-muted">—</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="6">
+                            <div class="empty-state">
+                                Nenhuma consulta encontrada.
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
-
-<table class="table table-striped ">
-    <thead class="table-secondary">
-        <tr>
-            <th>Paciente</th>
-            <th>Médico</th>
-            <th>Data</th>
-            <th>Horário</th>
-            <th>Status</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for consulta in consultas %}
-            <tr>
-                <td>{{ consulta.paciente.nome }}</td>
-                <td>{{ consulta.medico }}</td>
-                <td>{{ consulta.data|date:"d/m/Y" }}</td>
-                <td>{{ consulta.hora|time:"H:i" }}</td>
-                <td>{{ consulta.get_status_display }}</td>
-            </tr>
-        {% empty %}
-            <tr>
-                <td colspan="5" class="text-center">
-                    Nenhuma consulta encontrada.
-                </td>
-            </tr>
-        {% endfor %}
-    </tbody>
-</table>
-
 {% endblock %}

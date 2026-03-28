@@ -3,52 +3,61 @@
 {% block title %}Agendar Consulta{% endblock %}
 
 {% block content %}
-
-<h3 class="mb-4">Agendamento de Consulta</h3>
-
-<form method="post">
-    {% csrf_token %}
-    {% if form.non_field_errors %}
-    <div class="alert alert-danger">
-        {{ form.non_field_errors }}
-    </div>
-    {% endif %}
-
-
-    <div class="mb-3">
-        <label class="form-label">Paciente</label>
-        {{ form.paciente }}
-        {{ form.paciente.errors }}
+<div class="form-card">
+    <div class="mb-4">
+        <h1 class="form-title">Agendamento de Consulta</h1>
+        <p class="form-subtitle">
+            Selecione o paciente, médico, data e horário da consulta.
+        </p>
     </div>
 
-    <div class="mb-3">
-        <label class="form-label">Médico</label>
-        {{ form.medico }}
-        {{ form.medico.errors }}
-    </div>
+    <form method="post">
+        {% csrf_token %}
 
-    <div class="mb-3">
-        <label class="form-label">Data</label>
-        {{ form.data }}
-        {{ form.data.errors }}
-    </div>
+        {% if form.non_field_errors %}
+            <div class="alert alert-danger">
+                {{ form.non_field_errors }}
+            </div>
+        {% endif %}
 
-    <div class="mb-3">
-        <label class="form-label">Horário</label>
-        {{ form.hora }}
-        {{ form.hora.errors }}
-    </div>
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label class="form-label">Paciente</label>
+                {{ form.paciente }}
+                {{ form.paciente.errors }}
+            </div>
 
-    <div class="mb-3">
-        <label class="form-label">Observações</label>
-        {{ form.observacoes }}
-        {{ form.observacoes.errors }}
-    </div>
+            <div class="col-md-6">
+                <label class="form-label">Médico</label>
+                {{ form.medico }}
+                {{ form.medico.errors }}
+            </div>
 
-    <button class="btn btn-success">Salvar</button>
-    <a href="{% url 'consultas-lista' %}" class="btn btn-secondary">Cancelar</a>
+            <div class="col-md-6">
+                <label class="form-label">Data</label>
+                {{ form.data }}
+                {{ form.data.errors }}
+            </div>
 
-</form>
+            <div class="col-md-6">
+                <label class="form-label">Horário</label>
+                {{ form.hora }}
+                {{ form.hora.errors }}
+            </div>
 
+            <div class="col-12">
+                <label class="form-label">Observações</label>
+                {{ form.observacoes }}
+                {{ form.observacoes.errors }}
+            </div>
+        </div>
 
+        <div class="form-actions">
+            <button class="btn btn-success px-4">Salvar</button>
+            <a href="{% url 'consultas-lista' %}" class="btn btn-soft-secondary px-4">
+                Cancelar
+            </a>
+        </div>
+    </form>
+</div>
 {% endblock %}
